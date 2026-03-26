@@ -64,6 +64,14 @@ END
 GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_USER};
 SQL
 
+echo "[4.1/8] Ajustando permissões no schema public (para criar tabelas)..."
+sudo -u postgres psql -d "${DB_NAME}" -v ON_ERROR_STOP=1 <<SQL
+ALTER DATABASE ${DB_NAME} OWNER TO ${DB_USER};
+GRANT USAGE, CREATE ON SCHEMA public TO ${DB_USER};
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${DB_USER};
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO ${DB_USER};
+SQL
+
 echo "[5/8] Preparando diretório da aplicação..."
 mkdir -p "${APP_DIR}"
 chown -R root:root "${APP_DIR}" || true
