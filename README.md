@@ -50,7 +50,7 @@ Acesse:
 
 ## Dados iniciais (INSERT)
 
-O Flyway cria as tabelas e popula automaticamente:
+No startup, o Spring Boot executa `schema.sql` e `data.sql` e popula automaticamente:
 - `usuario`: 1 usuário (`admin` / `123456`)
 - `lancamento`: 10 registros
 

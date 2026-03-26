@@ -36,11 +36,11 @@ Observação: enums e controllers também são classes Java; se você precisar r
 - `senha` (VARCHAR(255), NOT NULL)
 - `situacao` (VARCHAR(20), NOT NULL)
 
-As tabelas são criadas pelo Flyway:
-- `app/src/main/resources/db/migration/V1__init.sql`
+As tabelas são criadas automaticamente no startup via scripts SQL do Spring Boot:
+- `app/src/main/resources/schema.sql`
 
 Os inserts iniciais (10 lançamentos + 1 usuário) são executados no startup:
-- `app/src/main/resources/db/migration/V2__seed.sql`
+- `app/src/main/resources/data.sql`
 
 ### Interface desenvolvida
 
