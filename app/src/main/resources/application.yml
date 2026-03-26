@@ -1,0 +1,27 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: lancamento
+  thymeleaf:
+    cache: false
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/lancamento_db}
+    username: ${DB_USER:lancamento_user}
+    password: ${DB_PASSWORD:lancamento_pass}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  flyway:
+    enabled: true
+
+logging:
+  level:
+    org.hibernate.SQL: warn
+
