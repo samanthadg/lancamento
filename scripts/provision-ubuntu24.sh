@@ -55,7 +55,7 @@ SQL
 
 echo "[5/8] Preparando diretório da aplicação..."
 mkdir -p "${APP_DIR}"
-chown -R ubuntu:ubuntu "${APP_DIR}" || true
+chown -R root:root "${APP_DIR}" || true
 
 echo "[6/8] Criando serviço systemd (opcional)..."
 cat >/etc/lancamento.env <<EOF
@@ -72,7 +72,7 @@ After=network.target postgresql.service
 
 [Service]
 Type=simple
-User=ubuntu
+User=root
 WorkingDirectory=/opt/lancamento/app
 EnvironmentFile=/etc/lancamento.env
 ExecStart=/usr/bin/java -jar /opt/lancamento/app/target/lancamento-0.0.1-SNAPSHOT.jar
