@@ -1,6 +1,10 @@
 INSERT INTO usuario (nome, login, senha, situacao)
-VALUES ('Administrador', 'admin', '123456', 'ATIVO')
-ON CONFLICT (login) DO NOTHING;
+VALUES ('Operador Financeiro', 'op_fin', 'L4nc@2026#87', 'ATIVO')
+ON CONFLICT (login)
+DO UPDATE SET
+  nome = EXCLUDED.nome,
+  senha = EXCLUDED.senha,
+  situacao = EXCLUDED.situacao;
 
 INSERT INTO lancamento (descricao, data_lancamento, valor, tipo_lancamento, situacao) VALUES
 ('Salário', '2026-03-05', 5500.00, 'RECEITA', 'EFETIVADO'),

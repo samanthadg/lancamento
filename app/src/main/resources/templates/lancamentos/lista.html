@@ -5,51 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Lançamentos</title>
     <style>
-      :root {
-        --bg: #0b1020;
-        --card: rgba(255, 255, 255, 0.06);
-        --border: rgba(255, 255, 255, 0.12);
-        --text: rgba(255, 255, 255, 0.92);
-        --muted: rgba(255, 255, 255, 0.68);
-        --accent: #a7ff83;
-        --danger: #ff7a7a;
-        --warn: #ffd27a;
-      }
       body {
         margin: 0;
-        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-        background: radial-gradient(1200px 800px at 10% 10%, #1b2b6b 0%, transparent 50%),
-          radial-gradient(900px 600px at 90% 30%, #1a6b4b 0%, transparent 52%),
-          var(--bg);
-        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f6f8;
+        color: #1f2a37;
       }
       .wrap {
-        max-width: 1050px;
-        margin: 36px auto;
-        padding: 0 18px 48px;
+        max-width: 1100px;
+        margin: 28px auto;
+        padding: 0 16px 44px;
       }
       header {
         display: flex;
         justify-content: space-between;
         gap: 16px;
-        align-items: baseline;
-        margin-bottom: 18px;
+        align-items: center;
+        margin-bottom: 14px;
       }
       h1 {
         margin: 0;
-        font-size: 28px;
-        letter-spacing: 0.2px;
+        font-size: 18px;
+        font-weight: 700;
       }
       .subtitle {
-        color: var(--muted);
-        font-size: 14px;
+        color: #52606d;
+        font-size: 13px;
       }
       .card {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 14px;
+        background: #fff;
+        border: 1px solid #d7dde4;
+        border-radius: 6px;
         overflow: hidden;
-        box-shadow: 0 18px 70px rgba(0, 0, 0, 0.35);
       }
       table {
         width: 100%;
@@ -57,60 +44,74 @@
       }
       th,
       td {
-        padding: 12px 14px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 12px;
+        border-bottom: 1px solid #edf1f5;
         text-align: left;
-        font-size: 14px;
+        font-size: 13px;
       }
       th {
-        position: sticky;
-        top: 0;
-        background: rgba(10, 16, 34, 0.9);
-        backdrop-filter: blur(8px);
-        color: rgba(255, 255, 255, 0.85);
+        background: #f7f9fb;
+        color: #334e68;
         font-weight: 600;
+        border-bottom: 1px solid #dfe7ef;
       }
       tbody tr:hover {
-        background: rgba(255, 255, 255, 0.04);
+        background: #fafcff;
       }
-      .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 4px 10px;
+      .tag {
+        display: inline-block;
+        padding: 2px 8px;
         border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid #d7dde4;
+        background: #fff;
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.85);
-        letter-spacing: 0.3px;
+        color: #334e68;
       }
-      .pill .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 999px;
-        background: var(--muted);
+      .tag.receita {
+        border-color: #b7e3c0;
+        background: #eef9f1;
+        color: #1e6b2b;
       }
-      .pill.receita .dot {
-        background: var(--accent);
+      .tag.despesa {
+        border-color: #f0c2c2;
+        background: #fff2f2;
+        color: #8a1f1f;
       }
-      .pill.despesa .dot {
-        background: var(--danger);
-      }
-      .pill.pendente .dot {
-        background: var(--warn);
+      .tag.pendente {
+        border-color: #f4dd9c;
+        background: #fff8e6;
+        color: #7a5a00;
       }
       .valor {
         font-variant-numeric: tabular-nums;
         white-space: nowrap;
       }
       .muted {
-        color: var(--muted);
+        color: #52606d;
       }
       footer {
         margin-top: 14px;
-        color: var(--muted);
+        color: #6b7785;
         font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+      form {
+        margin: 0;
+      }
+      .linkbtn {
+        border: 1px solid #d7dde4;
+        background: #fff;
+        color: #1f2a37;
+        border-radius: 4px;
+        padding: 6px 10px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .linkbtn:hover {
+        background: #f7f9fb;
       }
       @media (max-width: 700px) {
         th:nth-child(1),
@@ -151,15 +152,13 @@
               <td th:text="${#temporals.format(l.dataLancamento, 'dd/MM/yyyy')}">01/01/2026</td>
               <td class="valor" th:text="${#numbers.formatDecimal(l.valor, 1, 'COMMA', 2, 'POINT')}">0,00</td>
               <td>
-                <span class="pill" th:classappend="${l.tipoLancamento.name().toLowerCase()}">
-                  <span class="dot"></span>
-                  <span th:text="${l.tipoLancamento}">RECEITA</span>
+                <span class="tag" th:classappend="${' ' + l.tipoLancamento.name().toLowerCase()}" th:text="${l.tipoLancamento}">
+                  RECEITA
                 </span>
               </td>
               <td>
-                <span class="pill" th:classappend="${l.situacao.name().toLowerCase()}">
-                  <span class="dot"></span>
-                  <span th:text="${l.situacao}">EFETIVADO</span>
+                <span class="tag" th:classappend="${' ' + l.situacao.name().toLowerCase()}" th:text="${l.situacao}">
+                  EFETIVADO
                 </span>
               </td>
             </tr>
@@ -168,7 +167,10 @@
       </div>
 
       <footer>
-        Dica: acesse <span class="muted">/</span> para ser redirecionado para esta tela.
+        <div>Para sair, use o botão ao lado.</div>
+        <form method="post" action="/logout">
+          <button class="linkbtn" type="submit">Sair</button>
+        </form>
       </footer>
     </div>
   </body>

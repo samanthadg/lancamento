@@ -42,6 +42,10 @@ As tabelas são criadas automaticamente no startup via scripts SQL do Spring Boo
 Os inserts iniciais (10 lançamentos + 1 usuário) são executados no startup:
 - `app/src/main/resources/data.sql`
 
+Credenciais de teste (definidas em `data.sql`):
+- login: `op_fin`
+- senha: `L4nc@2026#87`
+
 ### Interface desenvolvida
 
 Tela web (Thymeleaf) que lista os lançamentos:
@@ -50,6 +54,11 @@ Tela web (Thymeleaf) que lista os lançamentos:
 - **Template**: `app/src/main/resources/templates/lancamentos/lista.html`
 
 A rota `/` redireciona para `/lancamentos`.
+
+### Autenticação
+
+- **Login**: `/login` (tela em `app/src/main/resources/templates/auth/login.html`)
+- **Regra**: `/lancamentos` exige sessão autenticada (usuário existe na tabela `usuario`)
 
 ## Publicação (VM Ubuntu 24 com IP público)
 

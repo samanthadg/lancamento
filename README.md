@@ -51,8 +51,12 @@ Acesse:
 ## Dados iniciais (INSERT)
 
 No startup, o Spring Boot executa `schema.sql` e `data.sql` e popula automaticamente:
-- `usuario`: 1 usuário (`admin` / `123456`)
+- `usuario`: 1 usuário (`op_fin` / `L4nc@2026#87`)
 - `lancamento`: 10 registros
+
+## Autenticação
+
+Para acessar a listagem (`/lancamentos`), é necessário autenticar em `/login` usando um usuário da tabela `usuario`.
 
 Se você precisar executar “direto no banco” via script SQL:
 - `scripts/sql/01_create_tables.sql`
