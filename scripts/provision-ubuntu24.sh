@@ -24,6 +24,21 @@ echo "deb [signed-by=/etc/apt/keyrings/adoptium.gpg] https://packages.adoptium.n
 apt-get update -y
 apt-get install -y temurin-21-jdk
 
+echo "[2.1/8] Definindo Java 21 como padrão..."
+if command -v update-alternatives >/dev/null 2>&1; then
+  JAVA_PATH="$(update-alternatives --list java 2>/dev/null | grep -E '/temurin-21|/java-21' | head -n 1 || true)"
+  JAVAC_PATH="$(update-alternatives --list javac 2>/dev/null | grep -E '/temurin-21|/java-21' | head -n 1 || true)"
+  if [[ -n "${JAVA_PATH}" ]]; then
+    update-alternatives --set java "${JAVA_PATH}" || true
+  fi
+  if [[ -n "${JAVAC_PATH}" ]]; then
+    update-alternatives --set javac "${JAVAC_PATH}" || true
+  fi
+fi
+
+java -version || true
+javac -version || true
+
 echo "[3/8] Instalando PostgreSQL 18 (PGDG)..."
 curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
   | gpg --dearmor -o /etc/apt/keyrings/postgresql.gpg
@@ -33,15 +48,11 @@ apt-get update -y
 apt-get install -y postgresql-18 postgresql-client-18
 
 echo "[4/8] Criando banco e usuário..."
-sudo -u postgres psql -v ON_ERROR_STOP=1 <<SQL
-DO \$\$
-BEGIN
-  IF NOT EXISTS (SELECT FROM pg_database WHERE datname = '${DB_NAME}') THEN
-    CREATE DATABASE ${DB_NAME};
-  END IF;
-END
-\$\$;
+if ! sudo -u postgres psql -tAc "SELECT 1 FROM pg_database WHERE datname='${DB_NAME}'" | grep -q 1; then
+  sudo -u postgres createdb "${DB_NAME}"
+fi
 
+sudo -u postgres psql -v ON_ERROR_STOP=1 <<SQL
 DO \$\$
 BEGIN
   IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = '${DB_USER}') THEN
@@ -63,6 +74,13 @@ DB_URL=jdbc:postgresql://localhost:5432/${DB_NAME}
 DB_USER=${DB_USER}
 DB_PASSWORD=${DB_PASS}
 PORT=8080
+EOF
+
+# Para o Maven e qualquer execução non-interactive pegar o JDK correto
+JDK_DIR="$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")"
+cat >/etc/profile.d/lancamento-java.sh <<EOF
+export JAVA_HOME=${JDK_DIR}
+export PATH=\$JAVA_HOME/bin:\$PATH
 EOF
 
 cat >/etc/systemd/system/lancamento.service <<'EOF'

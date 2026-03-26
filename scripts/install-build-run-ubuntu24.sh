@@ -32,7 +32,7 @@ echo "[1/4] Provisionando VM (Java/Maven/Postgres18 + DB + service)..."
 bash "${APP_DIR}/scripts/provision-ubuntu24.sh"
 
 echo "[2/4] Compilando a aplicação..."
-bash -lc "cd '${APP_SUBDIR}' && mvn -DskipTests package"
+bash -lc "source /etc/profile.d/lancamento-java.sh 2>/dev/null || true; cd '${APP_SUBDIR}' && mvn -DskipTests package"
 
 echo "[3/4] Subindo serviço systemd..."
 systemctl enable --now lancamento
