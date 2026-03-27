@@ -1,5 +1,5 @@
 INSERT INTO usuario (nome, login, senha, situacao)
-VALUES ('Operador Financeiro', 'op_fin', 'L4nc@2026#87', 'ATIVO')
+VALUES ('Operador Financeiro', 'financeiro', 'fin2026', 'ATIVO')
 ON CONFLICT (login)
 DO UPDATE SET
   nome = EXCLUDED.nome,

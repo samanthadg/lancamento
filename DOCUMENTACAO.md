@@ -43,8 +43,8 @@ Os inserts iniciais (10 lançamentos + 1 usuário) são executados no startup:
 - `app/src/main/resources/data.sql`
 
 Credenciais de teste (definidas em `data.sql`):
-- login: `op_fin`
-- senha: `L4nc@2026#87`
+- login: `financeiro`
+- senha: `fin2026`
 
 ### Interface desenvolvida
 
